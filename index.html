@@ -133,7 +133,7 @@
         </div>
     </div>
 
-    <script>
+   <script>
         const fileInput = document.getElementById('fileInput');
         const fileListContainer = document.getElementById('fileListContainer');
         const fileList = document.getElementById('fileList');
@@ -147,7 +147,6 @@
         const btnDownload = document.getElementById('btnDownload');
         const btnProses = document.getElementById('btnProses');
         
-    
         const counterBox = document.getElementById('counterBox');
         const totalBarisTeks = document.getElementById('totalBarisTeks');
         const statusExcelBadge = document.getElementById('statusExcelBadge');
@@ -207,6 +206,33 @@
             }, 30);
         }
 
+        // =========================================================
+        // FITUR BARU: Pemecah Baris Pintar (Ignore koma dalam kutip)
+        // =========================================================
+        function pecahBarisData(text, delimiter) {
+            let result = [];
+            let currentStr = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < text.length; i++) {
+                let char = text[i];
+                
+                if (char === '"') {
+              
+                    inQuotes = !inQuotes;
+                } else if (char === delimiter && !inQuotes) {
+               
+                    result.push(currentStr.trim());
+                    currentStr = '';
+                } else {
+                    currentStr += char;
+                }
+            }
+       
+            result.push(currentStr.trim());
+            return result;
+        }
+
         function parsingData() {
             tableRows = []; tableHeaders = [];
             let isFirstFile = true;
@@ -220,18 +246,18 @@
                     else if (lines[0].includes(";")) activeDelimiter = ";";
                     else if (lines[0].includes(",")) activeDelimiter = ",";
                     
-                    tableHeaders = lines[0].split(activeDelimiter);
+                    tableHeaders = pecahBarisData(lines[0], activeDelimiter);
                     tableHeaders.push("Sumber File");
                     isFirstFile = false;
 
                     for (let i = 1; i < lines.length; i++) {
-                        let rowData = lines[i].split(activeDelimiter);
+                        let rowData = pecahBarisData(lines[i], activeDelimiter);
                         rowData.push(file.name);
                         tableRows.push(rowData);
                     }
                 } else {
                     for (let i = 1; i < lines.length; i++) {
-                        let rowData = lines[i].split(activeDelimiter);
+                        let rowData = pecahBarisData(lines[i], activeDelimiter);
                         rowData.push(file.name);
                         tableRows.push(rowData);
                     }
