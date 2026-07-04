@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
+     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Note1s - Data Merger Santuy</title>
     <style>
@@ -11,34 +11,16 @@
         
         h1 { font-size: 2.5rem; background: linear-gradient(45deg, #e0c3fc 0%, #8ec5fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; font-weight: 800; }
         
-     
+        /* --- STYLING NAMA AUTHOR & TOOLTIP --- */
         #authorCredit { margin-bottom: 5px; color: #a29bfe; position: relative; font-weight: normal; font-size: 0.95rem; }
-        .author-name {
-            cursor: help; 
-            text-decoration: underline; 
-            color: #8ec5fc;
-            transition: color 0.2s ease-in-out;
-            font-weight: bold;
-        }
+        .author-name { cursor: help; text-decoration: underline; color: #8ec5fc; transition: color 0.2s ease-in-out; font-weight: bold; }
         .author-name:hover { color: #ff7675; } 
-        
         .author-name::after {
-            content: "Irwans Quote : Jaman skrg ngga perlu pusing, ada Codingan yang sulit langsung tanya AI 😎"; 
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            bottom: 150%; 
-            white-space: nowrap; 
-            background-color: rgba(29, 209, 161, 0.95);
-            color: #11071c; 
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none; 
-            transition: opacity 0.2s ease-in-out, visibility 0.2s;
+            content: "Codingan yang sulit udah pasti dibantu AI wkwkwkwk"; 
+            position: absolute; left: 50%; transform: translateX(-50%); bottom: 150%; 
+            white-space: nowrap; background-color: rgba(29, 209, 161, 0.95); color: #11071c; 
+            padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: bold;
+            opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.2s ease-in-out, visibility 0.2s;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
         .author-name:hover::after { opacity: 1; visibility: visible; }
@@ -50,12 +32,13 @@
         .upload-area:hover { background: rgba(162, 155, 254, 0.08); border-color: #a29bfe; }
         #fileInput { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
         
-        .file-list-container { background: rgba(0, 0, 0, 0.2); border-radius: 10px; padding: 15px; margin-bottom: 20px; text-align: left; max-height: 120px; overflow-y: auto; display: none; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .file-list-container { background: rgba(0, 0, 0, 0.2); border-radius: 10px; padding: 15px; margin-bottom: 20px; text-align: left; max-height: 150px; overflow-y: auto; display: none; border: 1px solid rgba(255, 255, 255, 0.05); }
         .file-list-container h3 { font-size: 0.9rem; color: #00cec9; margin-bottom: 8px; border-bottom: 1px solid rgba(0, 206, 201, 0.2); padding-bottom: 4px; }
-        .file-item { font-size: 0.85rem; padding: 3px 0; color: #b2bec3; }
+        .file-item { font-size: 0.85rem; padding: 4px 0; color: #b2bec3; display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.05); }
         
         .btn-main { background: linear-gradient(45deg, #6c5ce7, #a29bfe); color: white; border: none; padding: 12px 24px; font-size: 1rem; font-weight: bold; border-radius: 10px; cursor: pointer; box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4); transition: all 0.2s ease; margin-bottom: 15px; }
-        .btn-main:hover { transform: translateY(-2px); }
+        .btn-main:hover:not(:disabled) { transform: translateY(-2px); }
+        .btn-main:disabled { background: #576574; color: #c8d6e5; cursor: not-allowed; box-shadow: none; }
         .btn-download { background: linear-gradient(45deg, #00b894, #00cec9); box-shadow: 0 5px 15px rgba(0, 206, 201, 0.4); display: none; margin-top: 20px; width: auto; padding: 12px 30px; }
         
         .progress-container { margin: 15px 0; display: none; }
@@ -91,7 +74,7 @@
     <div class="container">
         <h1>Note1s</h1>
         <h5 id="authorCredit">by <span class="author-name">IrwanS</span></h5>
-        <div class="tagline">Data Merger - Satukan Log File Tanpa Pusing</div>
+        <div class="tagline">Data Merger - Satukan Log File Tanpa Pusing ✨</div>
         
         <div class="upload-area">
             <p id="uploadText">📁 Klik atau seret file Log/Notepad (.txt, .csv) ke sini</p>
@@ -101,9 +84,10 @@
         <div class="file-list-container" id="fileListContainer">
             <h3 id="uploadInfo">Daftar File Masuk:</h3>
             <div id="fileList"></div>
+            <div id="preCountInfo" style="margin-top: 10px; font-weight: bold; color: #ffeaa7; font-size: 0.9rem; display: none;"></div>
         </div>
         
-        <button class="btn-main" id="btnProses" onclick="prosesGabung()">Proses & Bikin Tabel!</button>
+        <button class="btn-main" id="btnProses" onclick="prosesGabung()" disabled>Pilih File Dulu Bos!</button>
         
         <div class="progress-container" id="progressContainer">
             <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressBarFill"></div></div>
@@ -113,8 +97,8 @@
         <div class="status-box" id="statusBox"></div>
         
         <div class="counter-box" id="counterBox">
-            <div class="counter-title">📊 Ringkasan Data Gabungan:</div>
-            <div>Total Baris Data: <span id="totalBarisTeks" style="font-weight: bold; color: #ffeaa7;">0</span> baris (tidak termasuk header).</div>
+            <div class="counter-title">📊 Ringkasan Data Gabungan (Setelah Olah):</div>
+            <div>Total Baris Data: <span id="totalBarisTeks" style="font-weight: bold; color: #55efc4;">0</span> baris (Header file udah dibuang).</div>
             <div style="margin-top: 8px;">Status Batasan Excel: <span id="statusExcelBadge" class="status-excel">Mengecek...</span></div>
         </div>
         
@@ -131,13 +115,14 @@
             <div class="joke-box" id="jokeBox">Tips: Ngeliat data ribuan baris emang bikin pusing. Ngopi dulu gih.</div>
             <button class="btn-stres" onclick="gantiQuote()">Ganti Tips (Manual) ☕</button>
         </div>
-    </div>
+    </div> 
 
-   <script>
+    <script>
         const fileInput = document.getElementById('fileInput');
         const fileListContainer = document.getElementById('fileListContainer');
         const fileList = document.getElementById('fileList');
         const uploadInfo = document.getElementById('uploadInfo');
+        const preCountInfo = document.getElementById('preCountInfo');
         const progressContainer = document.getElementById('progressContainer');
         const progressBarFill = document.getElementById('progressBarFill');
         const statusBox = document.getElementById('statusBox');
@@ -161,24 +146,61 @@
 
         fileInput.addEventListener('change', async () => {
             const files = fileInput.files;
+            
+ 
             rawFiles = []; tableRows = []; tableHeaders = [];
             tableWrapper.style.display = "none"; btnDownload.style.display = "none"; counterBox.style.display = "none";
             statusBox.innerText = ""; progressContainer.style.display = "none";
-            fileList.innerHTML = "";
+            fileList.innerHTML = ""; preCountInfo.style.display = "none";
             
             if (files.length > 0) {
                 fileListContainer.style.display = "block";
-                uploadInfo.innerText = `✅ Terdeteksi ${files.length} file siap diproses:`;
+                btnProses.disabled = true;
+                btnProses.innerText = "Sistem Lagi Baca File... Tunggu Bentar ⏳";
+                
+                let totalBarisMentah = 0;
+                
                 for (let i = 0; i < files.length; i++) {
+ 
+                    uploadInfo.innerText = `⏳ Membaca isi file ${i + 1} dari ${files.length}...`;
+                    
                     const content = await files[i].text();
-                    rawFiles.push({ name: files[i].name, content: content });
+                    
+  
+                    const lines = content.split(/\r?\n/).filter(line => line.trim() !== '');
+                    const jmlBarisFile = lines.length;
+                    totalBarisMentah += jmlBarisFile;
+
+                    rawFiles.push({ name: files[i].name, content: content, count: jmlBarisFile });
+                    
+  
                     const div = document.createElement('div');
                     div.className = "file-item";
-                    div.innerText = `📄 ${files[i].name}`;
+                    div.innerHTML = `<span>📄 ${files[i].name}</span> <span style="color:#00cec9;">${jmlBarisFile.toLocaleString('id-ID')} baris</span>`;
                     fileList.appendChild(div);
                 }
+                
+ 
+                uploadInfo.innerText = `✅ Sukses upload ${files.length} file:`;
+                
+ 
+                const estimasiDataAsli = totalBarisMentah - files.length;
+                
+                preCountInfo.innerHTML = `
+                    <hr style="border: 0.5px solid rgba(255,255,255,0.1); margin: 10px 0;">
+                    Total Baris Mentah Keseluruhan: ${totalBarisMentah.toLocaleString('id-ID')} baris<br>
+                    <span style="color:#81ecec; font-size:0.85rem;">(Estimasi Data Bersih setelah Header dibuang: ${estimasiDataAsli.toLocaleString('id-ID')} baris)</span>
+                `;
+                preCountInfo.style.display = "block";
+
+  
+                btnProses.innerText = "Proses & Bikin Tabel! 🚀";
+                btnProses.disabled = false;
+
             } else {
                 fileListContainer.style.display = "none";
+                btnProses.disabled = true;
+                btnProses.innerText = "Pilih File Dulu Bos!";
             }
         });
 
@@ -194,41 +216,26 @@
                 progress += 5;
                 progressBarFill.style.width = progress + "%";
                 document.getElementById('progressText').innerText = progress + "%";
-                statusBox.innerText = "Membaca baris per baris & menyusun tabel...";
+                statusBox.innerText = "Mengekstrak data dan menyatukan tabel...";
 
                 if (progress >= 100) {
                     clearInterval(interval);
                     parsingData();
                     statusBox.style.color = "#55efc4";
-                    statusBox.innerText = "🎉 Ekstraksi selesai! Klik judul kolom buat sortir data.";
+                    statusBox.innerText = "🎉 Ekstraksi selesai! Cek hasil komparasinya di bawah.";
                     btnProses.disabled = false;
                 }
             }, 30);
         }
 
-        // =========================================================
-        // FITUR BARU: Pemecah Baris Pintar (Ignore koma dalam kutip)
-        // =========================================================
         function pecahBarisData(text, delimiter) {
-            let result = [];
-            let currentStr = '';
-            let inQuotes = false;
-            
+            let result = []; let currentStr = ''; let inQuotes = false;
             for (let i = 0; i < text.length; i++) {
                 let char = text[i];
-                
-                if (char === '"') {
-              
-                    inQuotes = !inQuotes;
-                } else if (char === delimiter && !inQuotes) {
-               
-                    result.push(currentStr.trim());
-                    currentStr = '';
-                } else {
-                    currentStr += char;
-                }
+                if (char === '"') inQuotes = !inQuotes;
+                else if (char === delimiter && !inQuotes) { result.push(currentStr.trim()); currentStr = ''; } 
+                else currentStr += char;
             }
-       
             result.push(currentStr.trim());
             return result;
         }
@@ -341,7 +348,6 @@
             URL.revokeObjectURL(url);
             gantiQuote();
         }
-
         const santuyQuotes = [
             "Tips: Ngeliat data ribuan baris emang bikin pusing. Ngopi dulu gih.",
             "Semrawutnya data ini gak seberapa dibanding isi kepala lu bos. Semangat!",
